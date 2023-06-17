@@ -1,4 +1,3 @@
-<a href="{% url 'logout' %}" class="ml-5">Выход</a>
 <h1> Список дел </h1>
 <a href= "{% url 'task-create' %}"> Добавить задачу </a>
 {% if tasks %}
@@ -9,14 +8,24 @@
         <th></th>
     </tr>
     {% for task in tasks %}
+    {% if task.complete %}
+    <tr>
+        <td><i><s>{{task.title}}</s></i></td>
+        <td><a href = "{% url 'task' task.id %}" > Просмотр </a></td>
+        <td><a href = "{% url 'task-update' task.id%}" > Изменить </a></td>
+        <td><a href = "{% url 'tasks-delete' task.id%}" > Удалить </a></td>
+    </tr>
+    {% else %}
     <tr>
         <td>{{task.title}}</td>
         <td><a href = "{% url 'task' task.id %}" > Просмотр </a></td>
         <td><a href = "{% url 'task-update' task.id%}" > Изменить </a></td>
         <td><a href = "{% url 'tasks-delete' task.id%}" > Удалить </a></td>
     </tr>
+    {% endif %}
     {% endfor %}
     {% else %}
     <h3>Нет дел в листе</h3>
     {% endif %}
 </table>
+<a href="{% url 'logout' %}" class="ml-5">Выход</a>

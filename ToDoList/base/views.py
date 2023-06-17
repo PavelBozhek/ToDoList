@@ -9,12 +9,26 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout
 from django.views import View
 
+
 from .models import Task
+from .serializers import *
 
 
 class TaskList(ListView):
     model = Task
     context_object_name = 'tasks'
+    template_name = 'task_list.html'
+
+    def get_queryset(self):
+        user_id = self.kwargs.get('pk')
+        return Task.objects.filter(user_id=user_id)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        tasks = Task.objects.filter(user=self.request.user)
+        serializer = TaskSerializer(tasks, many=True)
+        context['tasks'] = serializer.data
+        return context
 
 
 class TaskDetail(DetailView):
@@ -22,20 +36,28 @@ class TaskDetail(DetailView):
     context_object_name = 'task'
     template_name = 'base/task.html'
 
+
 class TaskCreate(CreateView):
     model = Task
     fields = ['title', 'description', 'complete']
     success_url = reverse_lazy('task-create')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
 
 class TaskUpdate(UpdateView):
     model = Task
     fields = ['title', 'description', 'complete']
     success_url = reverse_lazy('tasks')
 
+
 class TaskDelete(DeleteView):
     model = Task
     context_object_name = 'task'
     success_url = reverse_lazy('tasks')
+
 
 class CustomLoginView(LoginView):
     template_name = 'base/login.html'
@@ -44,6 +66,7 @@ class CustomLoginView(LoginView):
 
     def get_success_url(self):
         return reverse_lazy('tasks')
+
 
 class RegisterPage(FormView):
     template_name = 'base/register.html'
