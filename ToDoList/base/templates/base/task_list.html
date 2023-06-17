@@ -12,7 +12,7 @@
         <td>{{task.title}}</td>
         <td><a href = "{% url 'task' task.id %}" > Просмотр </a></td>
         <td><a href = "{% url 'tasks-update' task.id%}" > Изменить </a></td>
-        <td><a href = "" > Удалить </a></td>
+        <td><a href = "{% url 'tasks-delete' task.id%}" > Удалить </a></td>
     </tr>
     {% empty %}
     <h3>Нет дел в листе</h3>

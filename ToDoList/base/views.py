@@ -27,7 +27,7 @@ class TaskUpdate(UpdateView):
     fields = ['title', 'description', 'complete']
     success_url = reverse_lazy('task-update')
 
-class DeleteView(DeleteView):
+class TaskDelete(DeleteView):
     model = Task
     context_object_name = 'task'
     success_url = reverse_lazy('tasks')
