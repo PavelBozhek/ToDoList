@@ -1,0 +1,12 @@
+<div class="header-bar">
+    <h1>Авторизация</h1>
+</div>
+<div class="card-body">
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Войти </button>
+    <small><p>Нет аккаунта? <a href="{% url 'register' %}">Регистрация </a></p>
+    </small>
+    </form>
+</div>
